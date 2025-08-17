@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Redirector</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 0 20px;
+            line-height: 1.6;
+        }
+        .error {
+            color: red;
+            display: none;
+            margin-top: 10px;
+        }
+        .info {
+            background-color: #f0f0f0;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>URL Redirector</h1>
+    
+    <div class="info">
+        <p>To use this redirector, add a <code>redirectTo</code> parameter to the URL:</p>
+        <p><code>index.html?redirectTo=https://example.com</code></p>
+    </div>
+
+    <div id="error" class="error"></div>
+
+    <script>
+        // Function to get URL parameters
+        function getQueryParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
+
+        // Function to validate URL
+        function isValidUrl(string) {
+            try {
+                new URL(string);
+                return true;
+            } catch (_) {
+                return false;
+            }
+        }
+
+        // Main redirect logic
+        window.onload = function() {
+            const redirectUrl = getQueryParam('redirectTo');
+            const errorDiv = document.getElementById('error');
+
+            if (!redirectUrl) {
+                errorDiv.style.display = 'block';
+                errorDiv.textContent = 'Missing redirectTo parameter';
+                return;
+            }
+
+            if (!isValidUrl(redirectUrl)) {
+                errorDiv.style.display = 'block';
+                errorDiv.textContent = 'Invalid URL provided';
+                return;
+            }
+
+            // Perform the redirect
+            window.location.href = redirectUrl;
+        };
+    </script>
+</body>
+</html>
